@@ -34,7 +34,7 @@ export function GameOver({ actions }: GameOverProps) {
   return (
     <>
       <header>
-          <div><div className="meta">Neon Courier route complete</div><h1>Game Over</h1><p>Review the last delivery run, restart the route, or pause before returning to dispatch.</p></div>
+          <div><div className="meta">Neon Courier route complete</div><h1>Game Over</h1><p>Review the last delivery run and restart the route when dispatch is ready.</p></div>
           <nav aria-label="Fallback design navigation"><a href="#fallback-game-board">Game Board</a><a href="#fallback-main-menu">Main Menu</a><a href="#fallback-pause-overlay">Pause Overlay</a><a href="#fallback-game-over">Game Over</a><a href="#fallback-controls-help">Controls Help</a></nav>
         </header>
         <main id="fallback-game-over">
@@ -44,7 +44,7 @@ export function GameOver({ actions }: GameOverProps) {
                 <h2>Status</h2>
                 <div className="mini-grid" aria-label="Gameplay status preview">{miniCells.map((isActive, index) => <span className={isActive ? "active" : ""} key={index}></span>)}</div>
                 <dl><dt>Score</dt><dd>{score.toLocaleString("en-US")}</dd><dt>Level</dt><dd>{level}</dd><dt>Progress</dt><dd>{progress}%</dd></dl>
-                <button type="button" data-action-id="pause-1" disabled title="Route complete">Pause</button><button type="button" data-action-id="restart-2" onClick={handleRestart}>Restart</button>
+                <button type="button" disabled title="Route complete">Complete</button><button type="button" data-action-id="restart-2" onClick={handleRestart}>Restart</button>
               </aside>
             </section></main>
     </>

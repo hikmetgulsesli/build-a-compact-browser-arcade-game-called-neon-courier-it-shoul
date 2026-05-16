@@ -24,10 +24,6 @@ export function GameOver({ actions }: GameOverProps) {
   const boardCells = useMemo(() => Array.from({ length: 96 }, (_, index) => boardActiveCells.has(index)), []);
   const miniCells = useMemo(() => Array.from({ length: 16 }, (_, index) => miniActiveCells.has(index)), []);
 
-  const handlePause = () => {
-    actions?.["pause-1"]?.();
-  };
-
   const handleRestart = () => {
     setScore(0);
     setLevel(1);
@@ -48,7 +44,7 @@ export function GameOver({ actions }: GameOverProps) {
                 <h2>Status</h2>
                 <div className="mini-grid" aria-label="Gameplay status preview">{miniCells.map((isActive, index) => <span className={isActive ? "active" : ""} key={index}></span>)}</div>
                 <dl><dt>Score</dt><dd>{score.toLocaleString("en-US")}</dd><dt>Level</dt><dd>{level}</dd><dt>Progress</dt><dd>{progress}%</dd></dl>
-                <span className="meta" aria-live="polite">Route complete</span><button type="button" data-action-id="pause-1" onClick={handlePause}>Pause</button><button type="button" data-action-id="restart-2" onClick={handleRestart}>Restart</button>
+                <span className="meta" aria-live="polite">Route complete</span><button type="button" data-action-id="restart-2" onClick={handleRestart}>Restart</button>
               </aside>
             </section></main>
     </>

@@ -70,12 +70,18 @@ export function useAppState(): RuntimeBridge {
   }, []);
 
   const resumeGame = useCallback(() => {
-    setState((current) => ({
-      ...current,
-      view: 'playing',
-      status: current.status === 'ended' ? 'ended' : 'running',
-      message: current.job.carried ? 'Reach the drop zone' : 'Collect the neon package',
-    }));
+    setState((current) => {
+      if (current.status === 'ended') {
+        return current;
+      }
+
+      return {
+        ...current,
+        view: 'playing',
+        status: 'running',
+        message: current.job.carried ? 'Reach the drop zone' : 'Collect the neon package',
+      };
+    });
   }, []);
 
   const pauseGame = useCallback(() => {

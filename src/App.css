@@ -1,7 +1,7 @@
 .neon-app {
   min-height: 100vh;
-  background: #07111f;
-  color: #f8fbff;
+  background: var(--color-background);
+  color: var(--color-text);
   position: relative;
   overflow-x: hidden;
 }
@@ -24,16 +24,16 @@
 
 .hud span,
 .status-line {
-  border: 1px solid rgba(125, 242, 255, 0.38);
-  background: rgba(7, 17, 31, 0.82);
-  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  border-radius: var(--radius-card);
   padding: 10px;
   text-align: center;
 }
 
 .status-line {
   margin: 10px 0;
-  color: #93f7c5;
+  color: var(--color-primary);
 }
 
 .neon-grid {
@@ -46,24 +46,24 @@
 .neon-cell {
   display: grid;
   place-items: center;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
-  color: #07111f;
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  color: var(--color-background);
   font-weight: 900;
 }
 
 .neon-cell.is-player {
-  background: #7df2ff;
-  box-shadow: 0 0 18px rgba(125, 242, 255, 0.74);
+  background: var(--color-primary);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-primary) 74%, transparent);
 }
 
 .neon-cell.is-pickup {
-  background: #ffe066;
+  background: var(--color-accent);
 }
 
 .neon-cell.is-dropoff {
-  background: #93f7c5;
+  background: var(--color-primary);
 }
 
 .touch-pad {
@@ -76,9 +76,9 @@
 .touch-pad button {
   min-height: 44px;
   border: 0;
-  border-radius: 8px;
-  background: #f8fbff;
-  color: #07111f;
+  border-radius: var(--radius-card);
+  background: var(--color-text);
+  color: var(--color-background);
   font-weight: 800;
 }
 

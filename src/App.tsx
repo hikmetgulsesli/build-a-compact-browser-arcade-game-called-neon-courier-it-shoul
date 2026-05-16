@@ -71,9 +71,18 @@ export default function App() {
     const isPlayer = point.x === state.player.x && point.y === state.player.y;
     const isPickup = !state.job.carried && point.x === state.job.pickup.x && point.y === state.job.pickup.y;
     const isDropoff = point.x === state.job.dropoff.x && point.y === state.job.dropoff.y;
+    const cellContents = isPlayer ? 'C' : isPickup ? 'P' : isDropoff ? 'D' : '';
+    const cellLabel = isPlayer
+      ? `Courier at row ${point.y + 1}, column ${point.x + 1}`
+      : isPickup
+        ? `Pickup at row ${point.y + 1}, column ${point.x + 1}`
+        : isDropoff
+          ? `Dropoff at row ${point.y + 1}, column ${point.x + 1}`
+          : `Empty cell at row ${point.y + 1}, column ${point.x + 1}`;
 
     return (
       <div
+        aria-label={cellLabel}
         className={[
           'neon-cell',
           isPlayer ? 'is-player' : '',
@@ -81,8 +90,9 @@ export default function App() {
           isDropoff ? 'is-dropoff' : '',
         ].join(' ')}
         key={`${point.x}-${point.y}`}
+        role="gridcell"
       >
-        {isPlayer ? 'C' : isPickup ? 'P' : isDropoff ? 'D' : ''}
+        {cellContents}
       </div>
     );
   });
@@ -119,7 +129,9 @@ export default function App() {
           <span>Best {state.highScore}</span>
         </div>
 
-        <div className="status-line">{state.message}</div>
+        <div className="status-line" aria-live="polite">
+          {state.message}
+        </div>
 
         <div className="neon-grid" role="grid" aria-label="Courier delivery grid">
           {cells}
@@ -132,7 +144,7 @@ export default function App() {
           <button type="button" onClick={() => actions.move('left')} aria-label="Move left">
             Left
           </button>
-          <button type="button" onClick={actions.pickupOrDropoff}>
+          <button type="button" onClick={actions.pickupOrDropoff} aria-label="Pickup or drop off delivery">
             Pickup / Drop
           </button>
           <button type="button" onClick={() => actions.move('right')} aria-label="Move right">

@@ -6,7 +6,7 @@
 // 2. Add useState for dynamic values (replace hardcoded text)
 // 3. Wire interactive controls through the typed actions prop
 // 4. Replace placeholder data with props/state
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export type ControlsHelpActionId = "start-game-1" | "resume-2" | "open-settings-3";
 
@@ -38,11 +38,13 @@ const deliveryTips = [
 export function ControlsHelp({ actions }: ControlsHelpProps) {
   const [lastAction, setLastAction] = useState("Choose a route action");
   const [settingsStatus, setSettingsStatus] = useState("Settings panel status: closed");
+  const settingsRequestCount = useRef(0);
 
   const handleAction = (actionId: ControlsHelpActionId, label: string) => {
     setLastAction(label);
     if (actionId === "open-settings-3") {
-      setSettingsStatus("Settings panel status: open request shown on Controls Help");
+      settingsRequestCount.current += 1;
+      setSettingsStatus(`Settings panel status: open request shown on Controls Help (${settingsRequestCount.current})`);
     }
     actions?.[actionId]?.();
   };

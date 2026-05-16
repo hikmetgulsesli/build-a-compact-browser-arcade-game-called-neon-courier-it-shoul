@@ -17,6 +17,10 @@ export interface DeliveryJob {
 export interface GameState {
   view: GameView;
   status: 'idle' | 'running' | 'paused' | 'ended';
+  paused: boolean;
+  gameOver: boolean;
+  isPaused: boolean;
+  isGameOver: boolean;
   score: number;
   highScore: number;
   secondsLeft: number;
@@ -24,6 +28,8 @@ export interface GameState {
   direction: Direction;
   job: DeliveryJob;
   message: string;
+  storageStatus: 'ready' | 'recovered' | 'unavailable' | 'error';
+  lastError: string | null;
   gridSize: number;
 }
 

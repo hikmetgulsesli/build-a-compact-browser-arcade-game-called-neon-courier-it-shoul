@@ -32,16 +32,24 @@ function nextJob(delivered: number) {
 }
 
 function createInitialState(): GameState {
+  const storedHighScore = loadHighScore();
+
   return {
     view: 'menu',
     status: 'idle',
+    paused: false,
+    gameOver: false,
+    isPaused: false,
+    isGameOver: false,
     score: 0,
-    highScore: loadHighScore(),
+    highScore: storedHighScore.value,
     secondsLeft: ROUND_SECONDS,
     player: START_POINT,
     direction: 'right',
     job: firstJob,
-    message: 'Ready for dispatch',
+    message: storedHighScore.lastError ?? 'Ready for dispatch',
+    storageStatus: storedHighScore.storageStatus,
+    lastError: storedHighScore.lastError,
     gridSize: GRID_SIZE,
   };
 }
@@ -51,6 +59,10 @@ function resetState(highScore: number): GameState {
     ...createInitialState(),
     view: 'playing',
     status: 'running',
+    paused: false,
+    gameOver: false,
+    isPaused: false,
+    isGameOver: false,
     highScore,
     message: 'Collect the neon package',
   };
@@ -61,8 +73,8 @@ export function useAppState(): RuntimeBridge {
 
   const finishIfNeeded = useCallback((score: number, highScore: number) => {
     const nextHighScore = Math.max(score, highScore);
-    saveHighScore(nextHighScore);
-    return nextHighScore;
+    const saveResult = saveHighScore(nextHighScore);
+    return { nextHighScore, saveResult };
   }, []);
 
   const startGame = useCallback(() => {
@@ -79,6 +91,10 @@ export function useAppState(): RuntimeBridge {
         ...current,
         view: 'playing',
         status: 'running',
+        paused: false,
+        gameOver: false,
+        isPaused: false,
+        isGameOver: false,
         message: current.job.carried ? 'Reach the drop zone' : 'Collect the neon package',
       };
     });
@@ -90,7 +106,16 @@ export function useAppState(): RuntimeBridge {
         return current;
       }
 
-      return { ...current, view: 'paused', status: 'paused', message: 'Courier paused' };
+      return {
+        ...current,
+        view: 'paused',
+        status: 'paused',
+        paused: true,
+        gameOver: false,
+        isPaused: true,
+        isGameOver: false,
+        message: 'Courier paused',
+      };
     });
   }, []);
 
@@ -99,6 +124,9 @@ export function useAppState(): RuntimeBridge {
       ...current,
       view: 'menu',
       status: current.status === 'running' ? 'paused' : current.status,
+      paused: current.status === 'running' || current.status === 'paused',
+      gameOver: current.status === 'ended',
+      isPaused: current.status === 'running' || current.status === 'paused',
       message: 'Ready for dispatch',
     }));
   }, []);
@@ -108,6 +136,9 @@ export function useAppState(): RuntimeBridge {
       ...current,
       view: 'help',
       status: current.status === 'running' ? 'paused' : current.status,
+      paused: current.status === 'running' || current.status === 'paused',
+      gameOver: current.status === 'ended',
+      isPaused: current.status === 'running' || current.status === 'paused',
       message: 'Use arrows or touch controls',
     }));
   }, []);
@@ -178,14 +209,20 @@ export function useAppState(): RuntimeBridge {
       }
 
       if (current.secondsLeft <= 1) {
-        const highScore = finishIfNeeded(current.score, current.highScore);
+        const { nextHighScore, saveResult } = finishIfNeeded(current.score, current.highScore);
         return {
           ...current,
           view: 'gameOver',
           status: 'ended',
+          paused: false,
+          gameOver: true,
+          isPaused: false,
+          isGameOver: true,
           secondsLeft: 0,
-          highScore,
-          message: 'Shift complete',
+          highScore: nextHighScore,
+          storageStatus: saveResult.storageStatus,
+          lastError: saveResult.lastError,
+          message: saveResult.lastError ?? 'Shift complete',
         };
       }
 
@@ -210,7 +247,16 @@ export function useAppState(): RuntimeBridge {
 
   useEffect(() => {
     if (state.score >= state.highScore) {
-      saveHighScore(state.highScore);
+      const saveResult = saveHighScore(state.highScore);
+
+      if (saveResult.lastError) {
+        setState((current) => ({
+          ...current,
+          storageStatus: saveResult.storageStatus,
+          lastError: saveResult.lastError,
+          message: saveResult.lastError ?? current.message,
+        }));
+      }
     }
   }, [state.highScore, state.score]);
 

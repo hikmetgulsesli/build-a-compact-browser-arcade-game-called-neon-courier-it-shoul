@@ -37,9 +37,13 @@ const deliveryTips = [
 
 export function ControlsHelp({ actions }: ControlsHelpProps) {
   const [lastAction, setLastAction] = useState("Choose a route action");
+  const [settingsStatus, setSettingsStatus] = useState("Settings panel status: closed");
 
   const handleAction = (actionId: ControlsHelpActionId, label: string) => {
     setLastAction(label);
+    if (actionId === "open-settings-3") {
+      setSettingsStatus("Settings panel status: open request shown on Controls Help");
+    }
     actions?.[actionId]?.();
   };
 
@@ -53,7 +57,7 @@ export function ControlsHelp({ actions }: ControlsHelpProps) {
           <section className="command-panel">
             <p>Deliver packages across the compact city grid before time runs out. Keep moving, collect from the pickup marker, and drop off at the destination marker.</p>
             <div className="action-row"><button type="button" data-action-id="start-game-1" onClick={() => handleAction("start-game-1", "Start Game selected")}>Start Game</button><button type="button" data-action-id="resume-2" onClick={() => handleAction("resume-2", "Resume selected")}>Resume</button><button type="button" data-action-id="open-settings-3" onClick={() => handleAction("open-settings-3", "Open Settings selected")}>Open Settings</button></div>
-            <div className="data-grid"><article><h2>Controls</h2>{controlGroups.map((group) => (<p key={group.title}><strong>{group.title}:</strong> {group.details}</p>))}</article><article><h2>Courier Rules</h2><p aria-live="polite">{lastAction}</p>{deliveryTips.map((tip) => (<p key={tip}>{tip}</p>))}</article></div>
+            <div className="data-grid"><article><h2>Controls</h2>{controlGroups.map((group) => (<p key={group.title}><strong>{group.title}:</strong> {group.details}</p>))}</article><article><h2>Courier Rules</h2><p aria-live="polite">{lastAction}</p><p aria-live="polite">{settingsStatus}</p>{deliveryTips.map((tip) => (<p key={tip}>{tip}</p>))}</article></div>
           </section></main>
     </>
   );

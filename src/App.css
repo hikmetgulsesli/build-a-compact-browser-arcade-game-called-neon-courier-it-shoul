@@ -1,0 +1,97 @@
+.neon-app {
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.courier-panel {
+  width: min(92vw, 520px);
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.hud span,
+.status-line {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  border-radius: var(--radius-card);
+  padding: 10px;
+  text-align: center;
+}
+
+.status-line {
+  margin: 10px 0;
+  color: var(--color-primary);
+}
+
+.neon-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  aspect-ratio: 1;
+}
+
+.neon-cell {
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  color: var(--color-background);
+  font-weight: 900;
+}
+
+.neon-cell.is-player {
+  background: var(--color-primary);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-primary) 74%, transparent);
+}
+
+.neon-cell.is-pickup {
+  background: var(--color-accent);
+}
+
+.neon-cell.is-dropoff {
+  background: var(--color-primary);
+}
+
+.touch-pad {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.touch-pad button {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--color-text);
+  color: var(--color-background);
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .courier-panel {
+    padding: 10px;
+  }
+
+  .hud {
+    font-size: 12px;
+  }
+
+  .touch-pad {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
